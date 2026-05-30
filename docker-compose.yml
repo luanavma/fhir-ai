@@ -1,45 +1,45 @@
 version: "2.2"
 services:
   iris:
-    image: intersystemsdc/irishealth-community:preview
-    command: --check-caps false
-    restart: always
-    cpuset: "0-1"
     build:
       context: iris
       dockerfile: Dockerfile
       args:
-        IRIS_IMAGE: intersystemsdc/irishealth-community:preview
+        IMAGE: intersystemsdc/irishealth-community:preview
+    image: my-fhir-iris:local
+    command: --check-caps false
+    restart: always
+    cpuset: "0-1"
     ports:
-      - 52774:52773
-      - 1973:1972
-      
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - 11434:11434
-    volumes:
-      - ollama:/root/.ollama
-    container_name: ollama
-    tty: true
-    restart: unless-stopped
-
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:main
-    container_name: open-webui
-    volumes:
-      - open-webui:/app/backend/data
-    depends_on:
-      - ollama
-    ports:
-      - 3000:8080
-    environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-      - 'WEBUI_SECRET_KEY='
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    restart: unless-stopped
-
-volumes:
-  ollama: {}
-  open-webui: {}
+      - "52773:52773"
+      - "1972:1972"
+#
+#  ollama:
+#    image: ollama/ollama:latest
+#    ports:
+#      - 11434:11434
+#    volumes:
+#      - ollama:/root/.ollama
+#    container_name: ollama
+#    tty: true
+#    restart: unless-stopped
+#
+#  open-webui:
+#    image: ghcr.io/open-webui/open-webui:main
+#    container_name: open-webui
+#    volumes:
+#      - open-webui:/app/backend/data
+#    depends_on:
+#      - ollama
+#    ports:
+#      - 3000:8080
+#    environment:
+#      - 'OLLAMA_BASE_URL=http://ollama:11434'
+#      - 'WEBUI_SECRET_KEY='
+#    extra_hosts:
+#      - host.docker.internal:host-gateway
+#    restart: unless-stopped
+#
+#volumes:
+#  ollama: {}
+#  open-webui: {}
