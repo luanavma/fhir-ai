@@ -18,12 +18,13 @@ import org.iris.ia.tools.TerminologyTool;
 public interface ClinicalFhirAgent {
 
     @SystemMessage("""
-    Você é um assistente FHIR.
-    Quando precisar consultar dados, use a ferramenta FhirSqlTool.
-    Responda em português.
+    You are a FHIR IRIS assistant.
+    The steps are:
+        1 - Generate SQL query with the FhirSqlTool to answer the question based on the HSFHIR_X0001_S/R Tables.
+        2 - Analyze the results and generate a final answer to the user.
     """)
     @UserMessage("""
-    {{question}}.
+    Generate a analysis of the question: {{question}}
     """)
     String ask(String question);
 }

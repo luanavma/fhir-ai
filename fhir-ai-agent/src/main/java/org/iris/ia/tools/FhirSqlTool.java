@@ -36,24 +36,14 @@ public class FhirSqlTool {
 
     @Tool("""
     Use this tool to answer questions about FHIR data.
-    This tool use a codify flow to generate SQL and execute :
-        1. First, it generates SQL based on the question and discovered terminology using the FlowSqlExecuteAgents.buildSql method.
-        2. Then, it validates the generated SQL with the provided SqlValidator to ensure it's read-only and only contains SELECT statements.
-        3. If the SQL is valid, it executes the SQL against the FHIR database and returns the results.
-        4. If the SQL is invalid, it returns an error message indicating the reason for invalidation instead of executing.
     """)
     public SqlFhirBuildResult queryFhir(String question) {
-
+        LOG.infof("queryFhir called with question: %s", question);
         String sql = flow.buildSql(question);
 
         return runSql(sql);
     }
 
-    @Tool("""
-        Use this tool to run read-only SQL SELECT queries against the FHIR database.
-        Always validate the SQL with the provided SqlValidator before executing.
-        If the SQL is invalid, return an error message instead of executing.
-    """)
     public SqlFhirBuildResult runSql(String sql) {
         LOG.infof("runSql called (len=%d)", sql == null ? 0 : sql.length());
         try {

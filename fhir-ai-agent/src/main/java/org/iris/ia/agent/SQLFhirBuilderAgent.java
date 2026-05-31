@@ -5,14 +5,13 @@ import io.quarkiverse.langchain4j.RegisterAiService;
 import java.util.List;
 
 import org.iris.ia.dto.TerminologyResult;
-import org.iris.ia.tools.ValidSqlTool;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@RegisterAiService(tools = {ValidSqlTool.class})
+@RegisterAiService
 public interface SQLFhirBuilderAgent {
 
   @SystemMessage("""
@@ -140,10 +139,8 @@ public interface SQLFhirBuilderAgent {
         - Never generate TRUNCATE.
         - Never generate CALL.
         - Never generate EXEC.
-        
-        # Use valid tools to validate SQL before execution.
-         if SQL is invalid, try to fix it based on the validation error and validate again until the SQL is valid.
-        
+        - Never use separators ';' or comments '--', '/*', '*/'.
+                
         # Query generation rules:
         - Prefer HSFHIR_X0001_S projected tables.
         - Use HSFHIR_X0001_R.Rsrc only when projected data is unavailable.
