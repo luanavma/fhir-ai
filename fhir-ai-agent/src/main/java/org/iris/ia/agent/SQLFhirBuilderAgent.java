@@ -5,18 +5,18 @@ import io.quarkiverse.langchain4j.RegisterAiService;
 import java.util.List;
 
 import org.iris.ia.dto.TerminologyResult;
+import org.iris.ia.tools.ValidSqlTool;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-@RegisterAiService
+@RegisterAiService(tools = {ValidSqlTool.class})
 public interface SQLFhirBuilderAgent {
 
-    @SystemMessage("""
-	    You are SQLFhirBuilderAgent.
-
+  @SystemMessage("""
+	      You are SQLFhirBuilderAgent.
         Your job is to generate safe read-only SQL for InterSystems IRIS FHIR data.
 
         Allowed schemas:
@@ -116,7 +116,7 @@ public interface SQLFhirBuilderAgent {
         - GetJSON(json,name)
         - GetProp(json,prop)
         - GetAtJSON(json,position)
-      .
+
         Use them whenever information exists only inside ResourceString.
         FHIR coding guidance:
 

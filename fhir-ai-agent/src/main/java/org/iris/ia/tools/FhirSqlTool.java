@@ -17,9 +17,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import java.util.Collections;
+import org.jboss.logging.Logger;
 
 @ApplicationScoped
 public class FhirSqlTool {
+
+    private static final Logger LOG = Logger.getLogger(FhirSqlTool.class);
 
     @Inject
     SqlValidator sqlValidator;
@@ -27,21 +30,24 @@ public class FhirSqlTool {
     @Inject
     EntityManager em;
 
-    @Tool(""" 
+    @Tool("""
         Use this tool to run read-only SQL SELECT queries against the FHIR database.
         Always validate the SQL with the provided SqlValidator before executing.
         If the SQL is invalid, return an error message instead of executing.
     """)
     public SqlFhirBuildResult runSql(String sql) {
+        LOG.infof("runSql called (len=%d)", sql == null ? 0 : sql.length());
         try {
             sqlValidator.validateReadOnlySelect(sql);
         } catch (Exception ex) {
+            LOG.warnf(ex, "SQL validation failed: %s", ex.getMessage());
             return new SqlFhirBuildResult(false, sql, new SqlQueryResponse(Collections.emptyList(), "Validation failed: " + ex.getMessage()));
         }
 
         try {
             @SuppressWarnings("unchecked")
-            List<Object[]> raw = (List<Object[]>) em.createNativeQuery(sql).setMaxResults(100).getResultList();
+            List<Object[]> raw = (List<Object[]>) em.createNativeQuery(sql).setMaxResults(200).getResultList();
+            LOG.infof("SQL executed, raw result count=%d", raw == null ? 0 : raw.size());
 
             List<String> colNames = extractSelectColumns(sql);
             List<Map<String, Object>> rows = new ArrayList<>();
@@ -54,8 +60,10 @@ public class FhirSqlTool {
                 }
                 rows.add(map);
             }
+            LOG.infof("Returning %d rows", rows.size());
             return new SqlFhirBuildResult(true, sql, new SqlQueryResponse(rows, null));
         } catch (Exception ex) {
+            LOG.errorf(ex, "Execution failed for SQL: %s", ex.getMessage());
             return new SqlFhirBuildResult(false, sql, new SqlQueryResponse(Collections.emptyList(), "Execution failed: " + ex.getMessage()));
         }
     }
@@ -83,6 +91,7 @@ public class FhirSqlTool {
             }
             return names;
         } catch (Exception ex) {
+            LOG.warnf(ex, "Failed to extract select columns from SQL: %s", sql);
             return List.of();
         }
     }

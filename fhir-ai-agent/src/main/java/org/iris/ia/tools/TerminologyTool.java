@@ -1,30 +1,30 @@
 package org.iris.ia.tools;
 
-import java.util.Locale;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.iris.ia.dto.TerminologyResult;
 
 import dev.langchain4j.agent.tool.Tool;
+import jakarta.annotation.Nonnull;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
-/**
- * Resolver bem simples de "terminologia"/tipo de recurso FHIR baseado na pergunta.
- *
- * Em um próximo passo isso pode ser trocado por um agente LLM ou por consulta a um servidor Terminology.
- */
 @ApplicationScoped
 public class TerminologyTool {
 
-    @Tool("""
-            Tries to infer the most relevant FHIR resourceType and a concept term from a free-text clinical question.
+    @Inject
+    EntityManager em;
 
-            Returns a TerminologyResult with:
-            - conceptId: optional/free
-            - system: optional/free
-            - term: inferred term
-            - resourceType: inferred FHIR type (Patient, Observation, Encounter, MedicationRequest, Condition, Procedure)
-            """)
-    public TerminologyResult getTerminologyResult() {
+    @Nonnull
+    @SuppressWarnings("null")
+    @Tool("""
+        Use this tool to discover FHIR terminology codes from the database.
+        It returns distinct code/text values for Condition and Observation resources.
+        Use it before generating disease-specific SQL when the coding representation is unknown.
+        """)
+    public List<TerminologyResult> discoverTerminology() {
         String sql = """
                 SELECT
                     ResourceType,
@@ -34,15 +34,22 @@ public class TerminologyTool {
                 WHERE ResourceType IN ('Condition','Observation')
                 GROUP BY
                     ResourceType,
+                    GetJSON(GetJSON(ResourceString,'code'),'coding'),
                     GetProp(GetJSON(ResourceString,'code'),'text')
                 ORDER BY
-                    ResourceType""";
+                    ResourceType,
+                    TextValue
+                """;
 
-        return new TerminologyResult(
-                null,
-                null,
-                null,
-                null);
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = em.createNativeQuery(sql).getResultList();
+
+        return rows.stream()
+        .map(row -> new TerminologyResult(
+                row[0] == null ? null : (String) row[0],
+                row[1] == null ? null : row[1].toString(),
+                row[2] == null ? null : row[2].toString()
+        ))
+        .toList();
     }
-
 }

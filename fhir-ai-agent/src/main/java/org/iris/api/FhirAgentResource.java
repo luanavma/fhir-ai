@@ -22,6 +22,13 @@ public class FhirAgentResource {
     @POST
     @Path("/ask")
     public AskResponse ask(AskRequest request) {
-        return clinicalFhirAgent.ask(request);
+        String answer = clinicalFhirAgent.ask(request.question());
+
+        return new AskResponse(
+                request.chatId(),
+                request.question(),
+                answer,
+                null
+        );
     }
 }

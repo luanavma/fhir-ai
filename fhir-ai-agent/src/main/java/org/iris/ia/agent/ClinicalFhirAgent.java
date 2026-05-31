@@ -1,15 +1,28 @@
 package org.iris.ia.agent;
 
-import org.iris.ia.dto.AskRequest;
-import org.iris.ia.dto.AskResponse;
-
+import dev.langchain4j.service.SystemMessage;
+import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import org.iris.ia.tools.DateTools;
+import org.iris.ia.tools.FhirSqlTool;
 
 @ApplicationScoped
-@RegisterAiService
+@RegisterAiService(tools = {
+        FhirSqlTool.class,
+        DateTools.class
+})
 public interface ClinicalFhirAgent {
 
-    public AskResponse ask(AskRequest request);
+    @SystemMessage("""
+    Você é um assistente FHIR.
+    Quando precisar consultar dados, use a ferramenta FhirSqlTool.
+    Responda em português.
+    """)
+    @UserMessage("""
+    Pergunta do usuário:
+    {{question}}
+    """)
+    String ask(String question);
 }
