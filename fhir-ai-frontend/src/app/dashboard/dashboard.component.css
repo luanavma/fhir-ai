@@ -1,0 +1,30 @@
+.dashboard {
+  background: #0d1117;
+  min-height: 100vh;
+  padding: 16px;
+  color: #e6edf3;
+}
+
+.main-row {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (max-width: 1024px) {
+  .main-row {
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+}

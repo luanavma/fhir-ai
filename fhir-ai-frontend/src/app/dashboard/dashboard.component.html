@@ -1,0 +1,21 @@
+<main class="dashboard" aria-label="Painel Epidemiológico">
+
+  <app-kpi-cards [kpis]="kpis()" />
+
+  <div class="main-row">
+    <section class="map-section" aria-label="Análise geográfica">
+      <app-heatmap [regions]="regions()" />
+      <div class="bottom-row">
+        <app-regions-table [regions]="regions()" />
+        <app-clusters [clusters]="clusters()" />
+      </div>
+    </section>
+
+    <aside aria-label="Assistente epidemiológico">
+      <app-epi-chat />
+    </aside>
+  </div>
+
+  <app-ai-summary [summary]="summary()" />
+
+</main>

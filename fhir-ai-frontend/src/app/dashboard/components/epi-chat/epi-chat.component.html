@@ -1,0 +1,34 @@
+<nz-card nzTitle="Assistente Epidemiológico" class="chat-card">
+
+  <p class="chat-subtitle" id="chat-desc">
+    Pergunte sobre padrões clínicos e regiões
+  </p>
+
+  <div #scrollEl class="messages" role="log" aria-live="polite" aria-label="Conversa com assistente epidemiológico"
+    aria-describedby="chat-desc">
+
+    @for (msg of messages(); track msg.timestamp) {
+    <div class="msg" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'"
+      [attr.aria-label]="msg.role === 'user' ? 'Você' : 'Assistente'">
+      <p>{{ msg.content }}</p>
+    </div>
+    }
+
+    @if (loading()) {
+    <div class="msg assistant" aria-label="Assistente está digitando">
+      <nz-spin nzSimple nzSize="small" />
+    </div>
+    }
+
+  </div>
+
+  <div class="chat-input" role="search">
+    <input nz-input [(ngModel)]="currentMessage" (keyup.enter)="sendMessage()" placeholder="Faça uma pergunta..."
+      aria-label="Digite sua pergunta epidemiológica" [disabled]="loading()" />
+    <button nz-button nzType="primary" (click)="sendMessage()" [disabled]="loading() || !currentMessage.trim()"
+      aria-label="Enviar pergunta">
+      <span nz-icon nzType="send"></span>
+    </button>
+  </div>
+
+</nz-card>

@@ -1,0 +1,36 @@
+<nz-card nzTitle="Regiões com Maior Crescimento">
+  <nz-table #table [nzData]="regions()" [nzPageSize]="5" [nzShowPagination]="true" nzSize="small"
+    aria-label="Tabela de regiões com maior crescimento epidemiológico">
+
+    <thead>
+      <tr>
+        <th scope="col">Região</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Crescimento</th>
+        <th scope="col">Reports</th>
+        <th scope="col">Sintomas Principais</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of table.data; track row.city) {
+      <tr>
+        <td>
+          <span class="dot" [style.background]="growthColor(row.growth)" aria-hidden="true">
+          </span>
+          {{ row.city }}
+        </td>
+        <td>{{ row.state }}</td>
+        <td>
+          <span [style.color]="growthColor(row.growth)">
+            +{{ row.growth }}%
+          </span>
+        </td>
+        <td>{{ row.totalCases }}</td>
+        <td>{{ row.mainSymptoms }}</td>
+      </tr>
+      }
+    </tbody>
+
+  </nz-table>
+</nz-card>

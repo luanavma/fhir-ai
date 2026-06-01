@@ -1,0 +1,42 @@
+@import 'ng-zorro-antd/ng-zorro-antd.dark.min.css';
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+// override global do Zorro pro tema escuro
+.ant-card {
+  background: #1c2128 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.ant-card-head {
+  background: #1c2128 !important;
+  border-color: #30363d !important;
+  color: #e6edf3 !important;
+}
+
+.ant-table {
+  background: #1c2128 !important;
+  color: #e6edf3 !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #161b22 !important;
+  color: #8b949e !important;
+  border-color: #30363d !important;
+}
+
+.ant-table-tbody > tr > td {
+  border-color: #30363d !important;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #161b22 !important;
+}

@@ -2,8 +2,6 @@ package org.iris.api;
 
 import org.iris.ia.agent.ClinicalFhirAgent;
 import org.iris.ia.dto.AskRequest;
-import org.iris.ia.dto.AskResponse;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
