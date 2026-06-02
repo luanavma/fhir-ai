@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy, Component, signal,
-  inject, AfterViewChecked, viewChild, ElementRef
+  inject, AfterViewChecked, viewChild, ElementRef,
+  output
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -9,8 +10,10 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { ChatMessage } from '../../../core/models/chat.model';
+import { AskResponse, ChatMessage } from '../../../core/models/chat.model';
 import { ChatService } from '../../../core/services/chat.service';
+import { AISummary } from '../../../core/models/ai-summary.model';
+import { RegionData } from '../../../core/models/region.model';
 
 @Component({
   selector: 'app-epi-chat',
@@ -27,6 +30,9 @@ export class EpiChatComponent implements AfterViewChecked {
 
   private readonly chatService = inject(ChatService);
   private scrollEl = viewChild<ElementRef>('scrollEl');
+
+  regionsUpdated = output<RegionData[]>();
+  summaryUpdated = output<AISummary>();
 
   messages = signal<ChatMessage[]>([]);
   loading  = signal(false);
@@ -46,21 +52,45 @@ export class EpiChatComponent implements AfterViewChecked {
 
     this.currentMessage = '';
     this.messages.update(msgs => [
-      ...msgs, { role: 'user', content: question, timestamp: new Date() }
+      ...msgs,
+      { role: 'user', content: question, timestamp: new Date() }
     ]);
 
     this.loading.set(true);
     this.shouldScroll = true;
 
     this.chatService.ask(question).subscribe({
-      next: (res) => {
+      next: (res: AskResponse) => {
+
         this.messages.update(msgs => [
-          ...msgs, { role: 'assistant', content: res.answer, timestamp: new Date() }
+          ...msgs,
+          { role: 'assistant', content: res.answer, timestamp: new Date() }
         ]);
+
+        // emite regiões pro mapa e tabela
+        if (res.regions?.length) {
+          this.regionsUpdated.emit(res.regions);
+        }
+
+        // emite summary pro card de resumo
+        if (res.summary) {
+          this.summaryUpdated.emit(res.summary);
+        }
+
         this.loading.set(false);
         this.shouldScroll = true;
       },
-      error: () => this.loading.set(false),
+      error: () => {
+        this.messages.update(msgs => [
+          ...msgs,
+          {
+            role: 'assistant',
+            content: 'Erro ao conectar com o servidor. Tente novamente.',
+            timestamp: new Date()
+          }
+        ]);
+        this.loading.set(false);
+      },
     });
   }
 

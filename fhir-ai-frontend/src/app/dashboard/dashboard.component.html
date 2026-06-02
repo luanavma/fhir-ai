@@ -1,18 +1,13 @@
-<main class="dashboard" aria-label="Painel Epidemiológico">
-
-  <app-kpi-cards [kpis]="kpis()" />
+<main class="dashboard" aria-label="Epidemiological Panel">
 
   <div class="main-row">
-    <section class="map-section" aria-label="Análise geográfica">
+    <section class="map-section" aria-label="Geographic Analysis">
       <app-heatmap [regions]="regions()" />
-      <div class="bottom-row">
-        <app-regions-table [regions]="regions()" />
-        <app-clusters [clusters]="clusters()" />
-      </div>
+      <app-regions-table [regions]="regions()" />
     </section>
 
-    <aside aria-label="Assistente epidemiológico">
-      <app-epi-chat />
+    <aside aria-label="Epidemiological assistant">
+      <app-epi-chat (regionsUpdated)="regions.set($event)" (summaryUpdated)="summary.set($event)" />
     </aside>
   </div>
 

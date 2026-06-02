@@ -1,9 +1,9 @@
 export interface RegionData {
   city: string;
-  state: string;
-  growth: number;
+  state?: string;
   totalCases: number;
-  mainSymptoms: string;
+  mainSymptoms: string | null;
   latitude: number;
   longitude: number;
+  similarity?: number;
 }

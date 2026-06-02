@@ -1,36 +1,69 @@
-<nz-card nzTitle="Regiões com Maior Crescimento">
-  <nz-table #table [nzData]="regions()" [nzPageSize]="5" [nzShowPagination]="true" nzSize="small"
-    aria-label="Tabela de regiões com maior crescimento epidemiológico">
+     <nz-card>
 
-    <thead>
-      <tr>
-        <th scope="col">Região</th>
-        <th scope="col">Estado</th>
-        <th scope="col">Crescimento</th>
-        <th scope="col">Reports</th>
-        <th scope="col">Sintomas Principais</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @for (row of table.data; track row.city) {
-      <tr>
-        <td>
-          <span class="dot" [style.background]="growthColor(row.growth)" aria-hidden="true">
-          </span>
-          {{ row.city }}
-        </td>
-        <td>{{ row.state }}</td>
-        <td>
-          <span [style.color]="growthColor(row.growth)">
-            +{{ row.growth }}%
-          </span>
-        </td>
-        <td>{{ row.totalCases }}</td>
-        <td>{{ row.mainSymptoms }}</td>
-      </tr>
+      @if (!regions().length) {
+        <div class="empty-state">
+          <p>Ask the assistant a question to view the data by region..</p>
+        </div>
       }
-    </tbody>
 
-  </nz-table>
-</nz-card>
+      @if (regions().length) {
+
+        <!-- epicentro -->
+        <div class="epicenter" role="region" aria-label="Região com mais casos">
+          <div class="epicenter-label">
+            <nz-tag nzColor="red">Epicentro</nz-tag>
+            <span class="epicenter-city">{{ topRegion()!.city }}</span>
+          </div>
+          <div class="epicenter-stats">
+            <span class="epicenter-cases">{{ topRegion()!.totalCases }} casos</span>
+          </div>
+        </div>
+
+        <!-- regiões similares -->
+        <p class="similar-label">Regions with similar behavior</p>
+
+        <nz-table
+          #table
+          [nzData]="similarRegions()"
+          [nzPageSize]="5"
+          [nzShowPagination]="similarRegions().length > 5"
+          nzSize="small"
+          aria-label="Regions with similar epidemiological patterns to the epicenter">
+
+          <thead>
+            <tr>
+              <th scope="col">Region</th>
+              <th scope="col">Cases</th>
+              <th scope="col">Similarity</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (row of table.data; track row.city) {
+              <tr>
+                <td>
+                  <span
+                    class="dot"
+                    [style.background]="similarityColor(row.similarity)"
+                    aria-hidden="true">
+                  </span>
+                  {{ row.city }}
+                </td>
+                <td>{{ row.totalCases }}</td>
+                <td>
+                  @if (row.similarity) {
+                    <nz-tag [nzColor]="similarityTagColor(row.similarity)">
+                      {{ (row.similarity * 100).toFixed(0) }}% similar
+                    </nz-tag>
+                  } @else {
+                    <span class="muted">—</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+
+        </nz-table>
+      }
+
+    </nz-card>

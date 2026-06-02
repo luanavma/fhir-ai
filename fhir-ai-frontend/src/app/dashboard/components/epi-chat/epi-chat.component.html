@@ -1,32 +1,34 @@
-<nz-card nzTitle="Assistente Epidemiológico" class="chat-card">
+<nz-card nzTitle="Epidemiological Assistant" class="chat-card">
 
-  <p class="chat-subtitle" id="chat-desc">
-    Pergunte sobre padrões clínicos e regiões
-  </p>
+  <div class="chat-header">
+    <p class="chat-subtitle" id="chat-desc">
+      Ask about clinical patterns and regions
+    </p> <i class="fas fa-robot"></i>
+  </div>
 
-  <div #scrollEl class="messages" role="log" aria-live="polite" aria-label="Conversa com assistente epidemiológico"
-    aria-describedby="chat-desc">
+  <div #scrollEl class="messages" role="log" aria-live="polite"
+    aria-label="Conversation with an epidemiological assistant" aria-describedby="chat-desc">
 
     @for (msg of messages(); track msg.timestamp) {
     <div class="msg" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'"
-      [attr.aria-label]="msg.role === 'user' ? 'Você' : 'Assistente'">
+      [attr.aria-label]="msg.role === 'user' ? 'You' : 'Assistant'">
       <p>{{ msg.content }}</p>
     </div>
     }
 
     @if (loading()) {
-    <div class="msg assistant" aria-label="Assistente está digitando">
+    <div class="msg assistant" aria-label="Assistant is typing">
       <nz-spin nzSimple nzSize="small" />
     </div>
     }
 
   </div>
 
-  <div class="chat-input" role="search">
-    <input nz-input [(ngModel)]="currentMessage" (keyup.enter)="sendMessage()" placeholder="Faça uma pergunta..."
-      aria-label="Digite sua pergunta epidemiológica" [disabled]="loading()" />
+  <div class="chat-input">
+    <input nz-input [(ngModel)]="currentMessage" (keyup.enter)="sendMessage()" placeholder="Ask a question..."
+      aria-label="Type your epidemiological question" [disabled]="loading()" />
     <button nz-button nzType="primary" (click)="sendMessage()" [disabled]="loading() || !currentMessage.trim()"
-      aria-label="Enviar pergunta">
+      aria-label="Send question">
       <span nz-icon nzType="send"></span>
     </button>
   </div>

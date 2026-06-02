@@ -58,17 +58,17 @@ export class HeatmapComponent implements AfterViewInit {
     if (this.heatLayer) {
       this.map.removeLayer(this.heatLayer);
     }
-
-    const max = Math.max(...data.map(r => r.growth));
+    const max = Math.max(...data.map(r =>r.totalCases));
 
     const points = data.map(r => [
-      r.latitude, r.longitude, r.growth / max
+      r.latitude, r.longitude, r.totalCases / max
     ] as [number, number, number]);
 
     this.heatLayer = (L as unknown as Record<string, CallableFunction>)
       ['heatLayer'](points, {
-        radius: 40, blur: 30,
+        radius: 35, blur: 25,
         gradient: { 0.2: '#00ff00', 0.5: '#ffff00', 0.75: '#ff6600', 1.0: '#ff0000' },
+        minOpacity: 0.8
       })
       .addTo(this.map);
   }

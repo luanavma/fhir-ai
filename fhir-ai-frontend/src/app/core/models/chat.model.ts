@@ -1,13 +1,15 @@
+import { AISummary } from "./ai-summary.model";
+import { RegionData } from "./region.model";
+
 export interface AskRequest {
   chatId: string;
   question: string;
 }
 
 export interface AskResponse {
-  chatId: string;
-  question: string;
   answer: string;
-  sql?: string;         // pra mostrar transparência
+  regions: RegionData[];
+  summary: AISummary | null;
 }
 
 export interface ChatMessage {
