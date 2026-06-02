@@ -26,8 +26,7 @@ public class FhirAgentResource {
     @Path("/ask")
     public Response ask(AskRequest request) {
         String improvedQuestion = improveAskAgent.improve(request.question());
-        String answer = clinicalFhirAgent.ask(improvedQuestion);
 
-        return Response.ok(answer).build();
+        return Response.ok(clinicalFhirAgent.ask(improvedQuestion)).build();
     }
 }

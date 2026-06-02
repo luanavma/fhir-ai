@@ -5,6 +5,7 @@ import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import org.iris.ia.dto.AskDashboardResponse;
 import org.iris.ia.tools.DateTools;
 import org.iris.ia.tools.FhirSqlTool;
 import org.iris.ia.tools.TerminologyTool;
@@ -26,5 +27,5 @@ public interface ClinicalFhirAgent {
     @UserMessage("""
     Generate a analysis of the question: {{question}}
     """)
-    String ask(String question);
+    AskDashboardResponse ask(String question);
 }
