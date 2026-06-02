@@ -8,18 +8,16 @@
 
       @if (regions().length) {
 
-        <!-- epicentro -->
         <div class="epicenter" role="region" aria-label="Região com mais casos">
           <div class="epicenter-label">
-            <nz-tag nzColor="red">Epicentro</nz-tag>
+            <nz-tag nzColor="red">Epicenter</nz-tag>
             <span class="epicenter-city">{{ topRegion()!.city }}</span>
           </div>
           <div class="epicenter-stats">
-            <span class="epicenter-cases">{{ topRegion()!.totalCases }} casos</span>
+            <span class="epicenter-cases">{{ topRegion()!.totalCases }} cases</span>
           </div>
         </div>
 
-        <!-- regiões similares -->
         <p class="similar-label">Regions with similar behavior</p>
 
         <nz-table
