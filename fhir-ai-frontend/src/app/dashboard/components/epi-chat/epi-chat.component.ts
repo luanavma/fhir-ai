@@ -35,7 +35,7 @@ export class EpiChatComponent implements AfterViewChecked {
   summaryUpdated = output<AISummary>();
 
   messages = signal<ChatMessage[]>([]);
-  loading  = signal(false);
+  loading = signal(false);
   currentMessage = '';
   private shouldScroll = false;
 
@@ -48,47 +48,24 @@ export class EpiChatComponent implements AfterViewChecked {
 
   sendMessage() {
     const question = this.currentMessage.trim();
-    if (!question || this.loading()) return;
-
+    if (!question || this.loading()) {
+      return;
+    }
     this.currentMessage = '';
-    this.messages.update(msgs => [
-      ...msgs,
-      { role: 'user', content: question, timestamp: new Date() }
-    ]);
-
+    this.appendMessage(question, 'user');
     this.loading.set(true);
     this.shouldScroll = true;
 
     this.chatService.ask(question).subscribe({
       next: (res: AskResponse) => {
-
-        this.messages.update(msgs => [
-          ...msgs,
-          { role: 'assistant', content: res.answer, timestamp: new Date() }
-        ]);
-
-        // emite regiões pro mapa e tabela
-        if (res.regions?.length) {
-          this.regionsUpdated.emit(res.regions);
-        }
-
-        // emite summary pro card de resumo
-        if (res.summary) {
-          this.summaryUpdated.emit(res.summary);
-        }
-
+        this.appendMessage(res.answer, 'assistant');
+        this.emitRegionsUpdate(res.regions);
+        this.emitSummaryUpdate(res.summary!);
         this.loading.set(false);
         this.shouldScroll = true;
       },
       error: () => {
-        this.messages.update(msgs => [
-          ...msgs,
-          {
-            role: 'assistant',
-            content: 'Erro ao conectar com o servidor. Tente novamente.',
-            timestamp: new Date()
-          }
-        ]);
+        this.appendConnectionErrorMessage();
         this.loading.set(false);
       },
     });
@@ -98,4 +75,34 @@ export class EpiChatComponent implements AfterViewChecked {
     const el = this.scrollEl()?.nativeElement;
     if (el) el.scrollTop = el.scrollHeight;
   }
+
+  private appendMessage(content: string, role: 'user' | 'assistant') {
+    this.messages.update(msgs => [
+      ...msgs,
+      { role, content, timestamp: new Date() }
+    ]);
+  }
+
+  private emitRegionsUpdate(regions: RegionData[]) {
+    if (regions?.length) {
+      this.regionsUpdated.emit(regions);
+    }
+  }
+
+  private emitSummaryUpdate(summary: AISummary) {
+    this.summaryUpdated.emit(summary);
+  }
+
+  private appendConnectionErrorMessage() {
+    this.messages.update(msgs => [
+      ...msgs,
+      {
+        role: 'assistant',
+        content: 'Erro ao conectar com o servidor. Tente novamente.',
+        timestamp: new Date()
+      }
+    ]);
+  }
+
+
 }
