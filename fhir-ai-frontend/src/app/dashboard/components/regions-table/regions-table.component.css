@@ -4,14 +4,6 @@
       padding: 32px 0;
     }
 
-    .epicenter {
-      background: #1a1a2e;
-      border: 1px solid #ff4d4f44;
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-    }
-
     .epicenter-label {
       display: flex;
       align-items: center;
@@ -49,4 +41,107 @@
 
     .muted {
       color: #8b949e;
+    }
+
+    .epicenter {
+      background: linear-gradient(135deg, #1a0a0a 0%, #1a1a2e 100%);
+      border: 1px solid #ff4d4f55;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle, #ff4d4f22 0%, transparent 70%);
+        pointer-events: none;
+      }
+    }
+
+    .epicenter-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .epicenter-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #ff4d4f;
+      text-transform: uppercase;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff4d4f;
+      box-shadow: 0 0 0 0 #ff4d4f66;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 #ff4d4f66;
+      }
+
+      70% {
+        box-shadow: 0 0 0 8px transparent;
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 transparent;
+      }
+    }
+
+    .epicenter-cases {
+      font-size: 36px;
+      font-weight: 800;
+      color: #ff6b6b;
+      line-height: 1;
+    }
+
+    .epicenter-bottom {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      justify-content: space-between;
+    }
+
+    .epicenter-city {
+      font-size: 20px;
+      font-weight: 700;
+      color: #e6edf3;
+    }
+
+    .epicenter-unit {
+      font-size: 12px;
+      color: #8b949e;
+    }
+
+    .epicenter-symptoms {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ff4d4f22;
+      font-size: 12px;
+      color: #8b949e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cases-block {
+      display: flex;
+      flex-direction: column;
     }

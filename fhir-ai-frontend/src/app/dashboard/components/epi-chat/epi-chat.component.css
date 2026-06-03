@@ -13,11 +13,13 @@
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding: 8px 0;
+  padding: 8px 9px;
   max-height: 460px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  scrollbar-color: #30363d #161b22;
+  scrollbar-width: thin;
 }
 
 .msg {
@@ -33,11 +35,13 @@
   &.assistant {
     background: #161b22;
   }
+}
 
-  p {
-    margin: 0;
-    white-space: pre-line;
-  }
+.chat-header {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+
 }
 
 .chat-input {
@@ -46,8 +50,110 @@
   margin-top: 12px;
 }
 
-.chat-header {
+.chat-icon {
+  margin-top: -14px;
+}
+
+.ant-card-body {
+  height: 100%;
   display: flex;
-  align-items: center;
+  padding: 24px;
+  flex-direction: column;
+}
+
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: #161b22;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 999px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: #484f5a;
+}
+
+
+.empty-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 8px;
+}
+
+.empty-chat-bubble {
+  background: #161b22;
+  border-radius: 12px 12px 12px 0;
+  padding: 14px 16px;
+  max-width: 85%;
+
+  p {
+    margin: 0 0 4px;
+    color: #e6edf3;
+    font-size: 14px;
+    line-height: 1.5;
+
+    &:last-child { margin: 0; }
+  }
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+}
+
+.suggestions-label {
+  color: #8b949e;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 4px;
+}
+
+.suggestion-chip {
+  background: transparent;
+  border: 1px solid #30363d;
+  border-radius: 20px;
+  color: #79c0ff;
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #161b22;
+    border-color: #79c0ff44;
+  }
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 0;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8b949e;
+    animation: bounce 1.2s infinite;
+
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+  }
+}
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-6px); }
 }
