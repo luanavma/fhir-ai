@@ -1,67 +1,80 @@
-     <nz-card>
+<nz-card>
 
-      @if (!regions().length) {
-        <div class="empty-state">
-          <p>Ask the assistant a question to view the data by region.</p>
+  @if (!regions().length) {
+    <div class="empty-state">
+      <p>Ask the assistant a question to view the data by region.</p>
+    </div>
+  }
+
+  @if (regions().length) {
+    <div class="epicenter" role="region" aria-label="Region with the most cases">
+
+      <div class="epicenter-top">
+        <div class="epicenter-badge">
+          <span class="pulse-dot" aria-hidden="true"></span>
+          EPICENTER
+        </div>
+        <span class="epicenter-cases">{{ topRegion()!.totalCases }}</span>
+      </div>
+
+      <div class="epicenter-bottom">
+        <span class="epicenter-city">{{ topRegion()!.city }}</span>
+        <span class="epicenter-unit">confirmed cases</span>
+      </div>
+
+      @if (topRegion()!.mainSymptoms) {
+        <div class="epicenter-symptoms">
+          <i class="fa-solid fa-virus-covid" aria-hidden="true"></i>
+          {{ topRegion()!.mainSymptoms }}
         </div>
       }
 
-      @if (regions().length) {
+    </div>
 
-        <div class="epicenter" role="region" aria-label="Region with the most cases">
-          <div class="epicenter-label">
-            <nz-tag nzColor="red">Epicenter</nz-tag>
-            <span class="epicenter-city">{{ topRegion()!.city }}</span>
-          </div>
-          <div class="epicenter-stats">
-            <span class="epicenter-cases">{{ topRegion()!.totalCases }} cases</span>
-          </div>
-        </div>
+    <p class="similar-label">Regions with similar behavior</p>
+    <nz-table
+      #table
+      [nzData]="similarRegions()"
+      [nzPageSize]="5"
+      [nzShowPagination]="similarRegions().length > 5"
+      nzSize="small"
+      aria-label="Regions with similar epidemiological patterns to the epicenter">
 
-        <p class="similar-label">Regions with similar behavior</p>
+      <thead>
+        <tr>
+          <th scope="col">Region</th>
+          <th scope="col">Cases</th>
+          <th scope="col">Similarity</th>
+        </tr>
+      </thead>
 
-        <nz-table
-          #table
-          [nzData]="similarRegions()"
-          [nzPageSize]="5"
-          [nzShowPagination]="similarRegions().length > 5"
-          nzSize="small"
-          aria-label="Regions with similar epidemiological patterns to the epicenter">
+      <tbody>
+        @for (row of table.data; track row.city) {
+          <tr>
+            <td>
+              <span
+                class="dot"
+                [style.background]="similarityColor(row.similarity)"
+                aria-hidden="true">
+              </span>
+              {{ row.city }}
+            </td>
+            <td>{{ row.totalCases }}</td>
+            <td>
+              @if (row.similarity) {
+                <nz-tag [nzColor]="similarityTagColor(row.similarity)">
+                  {{ (row.similarity * 100).toFixed(0) }}% similar
+                </nz-tag>
+              } @else {
+                <span class="muted">—</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
 
-          <thead>
-            <tr>
-              <th scope="col">Region</th>
-              <th scope="col">Cases</th>
-              <th scope="col">Similarity</th>
-            </tr>
-          </thead>
+    </nz-table>
 
-          <tbody>
-            @for (row of table.data; track row.city) {
-              <tr>
-                <td>
-                  <span
-                    class="dot"
-                    [style.background]="similarityColor(row.similarity)"
-                    aria-hidden="true">
-                  </span>
-                  {{ row.city }}
-                </td>
-                <td>{{ row.totalCases }}</td>
-                <td>
-                  @if (row.similarity) {
-                    <nz-tag [nzColor]="similarityTagColor(row.similarity)">
-                      {{ (row.similarity * 100).toFixed(0) }}% similar
-                    </nz-tag>
-                  } @else {
-                    <span class="muted">—</span>
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
+  }
 
-        </nz-table>
-      }
-
-    </nz-card>
+</nz-card>

@@ -38,12 +38,22 @@ export class EpiChatComponent implements AfterViewChecked {
   loading = signal(false);
   currentMessage = '';
   private shouldScroll = false;
+  suggestions = [
+    'Dengue cases by region this week',
+    'Which regions have the most respiratory cases?',
+    'Show gastrointestinal outbreak patterns',
+  ];
 
   ngAfterViewChecked() {
     if (this.shouldScroll) {
       this.scrollToBottom();
       this.shouldScroll = false;
     }
+  }
+
+  useSuggestion(suggestion: string) {
+    this.currentMessage = suggestion;
+    this.sendMessage();
   }
 
   sendMessage() {
@@ -98,7 +108,7 @@ export class EpiChatComponent implements AfterViewChecked {
       ...msgs,
       {
         role: 'assistant',
-        content: 'Erro ao conectar com o servidor. Tente novamente.',
+        content: 'Error connecting to server. Please try again.',
         timestamp: new Date()
       }
     ]);

@@ -14,6 +14,26 @@
   <div #scrollEl class="messages" role="log" aria-live="polite"
     aria-label="Conversation with an epidemiological assistant" aria-describedby="chat-desc">
 
+    @if (!messages().length && !loading()) {
+      <div class="empty-chat">
+        <div class="empty-chat-bubble assistant-bubble">
+          <p>👋 Hello! I'm your epidemiological assistant.</p>
+          <p>Ask me about disease patterns, regions, or outbreaks.</p>
+        </div>
+        <div class="suggestions">
+          <p class="suggestions-label">Try asking:</p>
+          @for (suggestion of suggestions; track suggestion) {
+            <button
+              class="suggestion-chip"
+              (click)="useSuggestion(suggestion)"
+              [attr.aria-label]="'Ask: ' + suggestion">
+              {{ suggestion }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+
     @for (msg of messages(); track msg.timestamp) {
     <div class="msg" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'"
       [attr.aria-label]="msg.role === 'user' ? 'You' : 'Assistant'">
