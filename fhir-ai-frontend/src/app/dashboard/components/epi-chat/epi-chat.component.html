@@ -1,9 +1,14 @@
-<nz-card nzTitle="Epidemiological Assistant" class="chat-card">
-
+<nz-card class="chat-card">
   <div class="chat-header">
-    <p class="chat-subtitle" id="chat-desc">
-      Ask about clinical patterns and regions
-    </p> <i class="fas fa-robot"></i>
+<span class="chat-icon">
+    <i class="fa-solid fa-robot fa-2xl"></i>
+  </span>
+  <div class="chat-description">
+    <nz-card-meta nzTitle="Epidemiological Assistant"></nz-card-meta>
+      <p class="chat-subtitle" id="chat-desc">
+        Ask about clinical patterns and regions
+      </p>
+    </div>
   </div>
 
   <div #scrollEl class="messages" role="log" aria-live="polite"
@@ -29,7 +34,7 @@
       aria-label="Type your epidemiological question" [disabled]="loading()" />
     <button nz-button nzType="primary" (click)="sendMessage()" [disabled]="loading() || !currentMessage.trim()"
       aria-label="Send question">
-      <span nz-icon nzType="send"></span>
+      <i class="fa-solid fa-paper-plane"></i>
     </button>
   </div>
 

@@ -40,3 +40,10 @@ body {
 .ant-table-tbody > tr:hover > td {
   background: #161b22 !important;
 }
+
+.ant-card-body {
+  height: 100%;
+  display: flex;
+  padding: 24px;
+  flex-direction: column;
+}
