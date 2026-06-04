@@ -26,8 +26,9 @@ services:
     depends_on:
       iris:
         condition: service_healthy
+    env_file:
+      - .env
     environment:
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
       QUARKUS_PROFILE: dev
       QUARKUS_DATASOURCE_JDBC_URL: jdbc:IRIS://iris:1972/FHIRSERVER
       QUARKUS_DATASOURCE_USERNAME: _SYSTEM
