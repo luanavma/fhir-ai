@@ -93,7 +93,7 @@ The first startup may take several minutes while Docker downloads the required i
 
 ## Architecture
 
-## authors
+## Authors
 
 - [Davi Massaru Teixeira Muta](https://community.intersystems.com/user/davimassaru-teixeiramuta)
   - Linkedin: https://www.linkedin.com/in/davimassarumuta/
