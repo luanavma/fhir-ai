@@ -1,7 +1,5 @@
-# 📊  EpInsights
+# ![EpiAtlas Banner](docs/images/banner.png)
  > Transform healthcare data into actionable insights through natural language conversations, geospatial visualization, and AI-assisted epidemiological investigation.
-
- ![EpiAtlas Banner](docs/images/banner.png)
 
 ## 📋 About
 
