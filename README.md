@@ -49,7 +49,7 @@ Make sure you have installed:
 
 📂 Clone Repository
 ```bash
-git clone https://github.com/luanavma/fhir-ai.git
+git clone https://github.com/luanavma/epi-insights.git
 ```
 
 ```bash
