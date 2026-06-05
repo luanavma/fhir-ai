@@ -1,5 +1,5 @@
 .chat-card {
-  height: 600px;
+  height: 652px;
   display: flex;
   flex-direction: column;
 }
@@ -17,7 +17,7 @@
   max-height: 460px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   scrollbar-color: #30363d #161b22;
   scrollbar-width: thin;
 }
@@ -47,7 +47,7 @@
 .chat-input {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 40px;
 }
 
 .chat-icon {

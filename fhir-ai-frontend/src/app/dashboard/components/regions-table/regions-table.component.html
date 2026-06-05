@@ -37,8 +37,8 @@
     <nz-table
       #table
       [nzData]="similarRegions()"
-      [nzPageSize]="5"
-      [nzShowPagination]="similarRegions().length > 5"
+      [nzPageSize]="3"
+      [nzShowPagination]="similarRegions().length > 3"
       nzSize="small"
       aria-label="Regions with similar epidemiological patterns to the epicenter">
 
@@ -51,7 +51,7 @@
       </thead>
 
       <tbody>
-        @for (row of similarRegions(); track row.similarCity) {
+        @for (row of table.data; track row.similarCity) {
           <tr>
             <td>
               <span
