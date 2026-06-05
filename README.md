@@ -1,9 +1,11 @@
-# 📊  project-name
+# 📊  EpInsights
  > Transform healthcare data into actionable insights through natural language conversations, geospatial visualization, and AI-assisted epidemiological investigation.
+
+ ![EpiAtlas Banner](docs/images/banner.png)
 
 ## 📋 About
 
-project-name is an intelligent epidemiological analysis platform designed to help healthcare professionals, researchers, and public health teams explore FHIR-based clinical data through a conversational interface.
+EpInsights is an intelligent epidemiological analysis platform designed to help healthcare professionals, researchers, and public health teams explore FHIR-based clinical data through a conversational interface.
 
 Instead of manually querying databases or navigating complex healthcare records, users can ask questions in natural language and receive answers grounded in real FHIR resources and epidemiological datasets.
 
