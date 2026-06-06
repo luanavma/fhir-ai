@@ -7,6 +7,8 @@ EpInsights is an intelligent epidemiological analysis platform designed to help 
 
 Instead of manually querying databases or navigating complex healthcare records, users can ask questions in natural language and receive answers grounded in real FHIR resources and epidemiological datasets.
 
+# ![EpiAtlas screen](docs/images/EpInsights-screen.png)
+
 ## ✨ Features
 
 Ask questions such as:
