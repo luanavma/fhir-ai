@@ -85,7 +85,7 @@ pip install faker
 * Generate the synthetic dataset:
 
 ```bash
-python seed.py --patients 500 --output ./iris/data --days 45 --seed 42
+python seed.py --patients 500 --output ./data --days 45 --seed 42
 ```
 
 This command creates a synthetic epidemiological FHIR dataset that will be automatically loaded into InterSystems IRIS during the container build process.
