@@ -4,8 +4,21 @@ import {
 } from '@angular/core';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import * as L from 'leaflet';
-import 'leaflet.heat';
 import { RegionData } from '../../../core/models/region.model';
+
+declare module 'leaflet' {
+  function heatLayer(
+    latlngs: Array<[number, number, number?]>,
+    options?: {
+      minOpacity?: number;
+      maxZoom?: number;
+      max?: number;
+      radius?: number;
+      blur?: number;
+      gradient?: Record<number, string>;
+    }
+  ): L.Layer;
+}
 
 @Component({
   selector: 'app-heatmap',
@@ -22,6 +35,7 @@ export class HeatmapComponent implements AfterViewInit {
   private map!: L.Map;
   private heatLayer: L.Layer | null = null;
   private markersLayer: L.LayerGroup | null = null;
+  private heatPluginLoaded = false;
 
   constructor() {
     effect(() => {
@@ -36,9 +50,11 @@ export class HeatmapComponent implements AfterViewInit {
     setTimeout(() => this.initMap(), 100);
   }
 
-  private initMap() {
+  private async initMap() {
     const el = this.mapEl()?.nativeElement;
     if (!el) return;
+
+    await this.loadHeatPlugin();
 
     this.map = L.map(el, {
       center: [-15.7801, -47.9292],
@@ -50,34 +66,48 @@ export class HeatmapComponent implements AfterViewInit {
       { attribution: '© OpenStreetMap © CARTO' }
     ).addTo(this.map);
 
-    if (this.regions().length) {
-      this.updateHeatmap(this.regions());
-    }
+    setTimeout(() => {
+      this.map.invalidateSize();
+      if (this.regions().length) {
+        this.updateHeatmap(this.regions());
+      }
+    }, 200);
+  }
+
+  private async loadHeatPlugin(): Promise<void> {
+    if (this.heatPluginLoaded) return;
+
+    (window as unknown as Record<string, unknown>)['L'] = L;
+
+    await import('leaflet.heat');
+    this.heatPluginLoaded = true;
   }
 
   private updateHeatmap(data: RegionData[]) {
     if (this.heatLayer) {
       this.map.removeLayer(this.heatLayer);
+      this.heatLayer = null;
     }
     if (this.markersLayer) {
       this.map.removeLayer(this.markersLayer);
       this.markersLayer = null;
     }
-    const max = Math.max(...data.map(r =>r.totalCases));
+
+    const max = Math.max(...data.map(r => r.totalCases));
 
     const points = data.map(r => [
-      r.latitude, r.longitude, r.totalCases / max
+      r.latitude,
+      r.longitude,
+      r.totalCases / max
     ] as [number, number, number]);
 
-    this.heatLayer = (L as unknown as Record<string, CallableFunction>)
-      ['heatLayer'](points, {
-        radius: 35, blur: 25,
-        gradient: { 0.2: '#00ff00', 0.5: '#ffff00', 0.75: '#ff6600', 1.0: '#ff0000' },
-        minOpacity: 0.8
-      })
-      .addTo(this.map);
+    this.heatLayer = L.heatLayer(points, {
+      radius: 35,
+      blur: 25,
+      gradient: { 0.2: '#00ff00', 0.5: '#ffff00', 0.75: '#ff6600', 1.0: '#ff0000' },
+      minOpacity: 0.8
+    }).addTo(this.map);
 
-    // Add markers with popups for each region
     this.markersLayer = L.layerGroup();
     data.forEach(r => {
       const marker = L.circleMarker([r.latitude, r.longitude], {
@@ -88,16 +118,18 @@ export class HeatmapComponent implements AfterViewInit {
         opacity: 1,
         fillOpacity: 0.9
       });
-      const popup = `<strong>${r.city} - ${r.state}</strong><br/>Cases: ${r.totalCases}<br/>Symptoms: ${r.mainSymptoms}`;
-      marker.bindPopup(popup);
+      marker.bindPopup(`
+        <strong>${r.city} — ${r.state}</strong><br/>
+        Cases: ${r.totalCases}<br/>
+        Symptoms: ${r.mainSymptoms ?? '—'}
+      `);
       this.markersLayer!.addLayer(marker);
     });
     this.markersLayer.addTo(this.map);
 
-    // Center map on region with most cases
-    const maxRegion = data.reduce((prev, cur) => (cur.totalCases > prev.totalCases ? cur : prev), data[0]);
-    if (maxRegion && maxRegion.latitude != null && maxRegion.longitude != null) {
-      this.map.flyTo([maxRegion.latitude, maxRegion.longitude], 8, { duration: 0.8 });
+    const epicenter = data[0];
+    if (epicenter?.latitude != null && epicenter?.longitude != null) {
+      this.map.flyTo([epicenter.latitude, epicenter.longitude], 6, { duration: 1 });
     }
   }
 }

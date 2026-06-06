@@ -36,9 +36,9 @@ export class EpiChatComponent implements AfterViewChecked {
   private scrollEl = viewChild<ElementRef>('scrollEl');
   
   similarRegionsUpdated = output<SimilarRegionData[]>();
-  regionsUpdated = output<RegionData[]>();
+  regionsUpdated = output<RegionData[]>();  
   summaryUpdated = output<AISummary>();
-  
+
   messages = signal<ChatMessage[]>([]);
   loading = signal(false);
 
@@ -74,8 +74,8 @@ export class EpiChatComponent implements AfterViewChecked {
 
     this.chatService.ask(question).subscribe({
       next: (res: AskResponse) => {
-        this.appendMessage(res.answer, 'assistant');
-        this.emitRegionsUpdate(res.regions);
+        this.appendMessage(res.summary?.text || res.answer, 'assistant');
+        this.emitRegionsUpdate(res.regions);        
         this.emitSummaryUpdate(res.summary!);
         this.loading.set(false);
         this.shouldScroll = true;
@@ -116,7 +116,7 @@ export class EpiChatComponent implements AfterViewChecked {
   private emitSummaryUpdate(summary: AISummary) {
     this.summaryUpdated.emit(summary);
   }
-
+  
   private appendConnectionErrorMessage() {
     this.messages.update(msgs => [
       ...msgs,

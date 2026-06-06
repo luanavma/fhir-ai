@@ -16,7 +16,7 @@ public class DateTools {
                 - current day
                 - without specifying a date
                 - anwared questions that require the current date
-                - when the user is asking for a date that can be calculated as calculated yaesterday, today, or tomorrow.
+                - when the user is asking for a date that can be calculated as calculated yesterday, today, or tomorrow.
             """)
     public String today() {
         return LocalDate.now()

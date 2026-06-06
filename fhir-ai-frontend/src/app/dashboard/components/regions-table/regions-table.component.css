@@ -23,12 +23,21 @@
       color: #e6edf3;
     }
 
-    .similar-label {
+    .similar-header {
+      margin-bottom: 12px;
+    }
+
+    .similar-title {
+      color: #e6edf3;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .similar-note {
       color: #8b949e;
       font-size: 12px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      line-height: 1.4;
     }
 
     .dot {
@@ -146,6 +155,6 @@
       flex-direction: column;
     }
 
-:host ::ng-deep .ant-card-body {
-  padding-bottom: 0;
-}
+    :host ::ng-deep .ant-card-body {
+      padding-bottom: 0;
+    }

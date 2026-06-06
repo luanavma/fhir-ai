@@ -15,6 +15,6 @@ export interface AskResponse {
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
-  sql?: string;         // mensagem do assistente pode ter o SQL
+  sql?: string;
   timestamp: Date;
 }

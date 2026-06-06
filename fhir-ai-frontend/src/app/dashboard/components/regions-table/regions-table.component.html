@@ -1,81 +1,90 @@
 <nz-card>
 
   @if (!regions().length) {
-    <div class="empty-state">
-      <p>Ask the assistant a question to view the data by region.</p>
-    </div>
+  <div class="empty-state">
+    <p>Ask the assistant a question to view the data by region.</p>
+  </div>
   }
 
   @if (regions().length) {
-    <div class="epicenter" role="region" aria-label="Region with the most cases">
+  <div class="epicenter" role="region" aria-label="Region with the most cases">
 
-      <div class="epicenter-top">
-        <div class="epicenter-badge">
-          <span class="pulse-dot" aria-hidden="true"></span>
-          EPICENTER
-        </div>
+    <div class="epicenter-top">
+      <div class="epicenter-badge">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        EPICENTER
       </div>
-
-      <div class="epicenter-bottom">
-        <span class="epicenter-city">{{ topRegion()!.city }}</span>
-        <div class="cases-block">
-        <span class="epicenter-cases">{{ topRegion()!.totalCases }}</span>
-        <span class="epicenter-unit">confirmed cases</span>
-        </div>
-      </div>
-
-      @if (topRegion()!.mainSymptoms) {
-        <div class="epicenter-symptoms">
-          <i class="fa-solid fa-virus-covid" aria-hidden="true"></i>
-          {{ topRegion()!.mainSymptoms }}
-        </div>
-      }
-
     </div>
 
-    <p class="similar-label">Regions with similar behavior</p>
-    <nz-table
-      #table
-      [nzData]="similarRegions()"
-      [nzPageSize]="3"
-      [nzShowPagination]="similarRegions().length > 3"
-      nzSize="small"
-      aria-label="Regions with similar epidemiological patterns to the epicenter">
+    <div class="epicenter-bottom">
+      <span class="epicenter-city">{{ topRegion()!.city }}</span>
+      <div class="cases-block">
+        <span class="epicenter-cases">{{ topRegion()!.totalCases }}</span>
+        <span class="epicenter-unit">confirmed cases</span>
+      </div>
+    </div>
 
-      <thead>
-        <tr>
-          <th scope="col">Region</th>
-          <th scope="col">Cases</th>
-          <th scope="col">Similarity</th>
-        </tr>
-      </thead>
+    @if (topRegion()!.mainSymptoms) {
+    <div class="epicenter-symptoms">
+      <i class="fa-solid fa-virus-covid" aria-hidden="true"></i>
+      {{ topRegion()!.mainSymptoms }}
+    </div>
+    }
 
-      <tbody>
-        @for (row of table.data; track row.similarCity) {
-          <tr>
-            <td>
-              <span
-                class="dot"
-                [style.background]="similarityColor(row.similarity)"
-                aria-hidden="true">
-              </span>
-              {{ row.similarCity  }} / {{ row.similarState }}
-            </td>
-            <td>{{ row.totalOccurrences  }}</td>
-            <td>
-              @if (row.similarity) {
-                <nz-tag [nzColor]="similarityTagColor(row.similarity)">
-                  {{ (row.similarity * 100).toFixed(0) }}% similar
-                </nz-tag>
-              } @else {
-                <span class="muted">—</span>
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
+  </div>
 
-    </nz-table>
+  <div class="similar-header">
+    <div class="similar-title">
+      Regions with similar epidemiological behavior
+    </div>
+
+    <div class="similar-note">
+      Similarity is based on historical disease and symptom patterns; case totals
+      represent the underlying regional dataset.
+    </div>
+  </div>
+  <nz-table #table [nzData]="similarRegions()" [nzPageSize]="3" [nzShowPagination]="similarRegions().length > 3"
+    nzSize="small" aria-label="Regions with similar epidemiological patterns to the epicenter">
+
+    <thead>
+      <tr>
+        <th scope="col">Region</th>
+        <th scope="col">Historical cases</th>
+        <th scope="col">Similarity</th>
+        <th scope="col">Main symptoms</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (row of table.data; track row.similarCity) {
+      <tr>
+        <td>
+          <span class="dot" [style.background]="similarityColor(row.similarity)" aria-hidden="true">
+          </span>
+          {{ row.similarCity }} / {{ row.similarState }}
+        </td>
+        <td>{{ row.totalOccurrences }}</td>
+        <td>
+          @if (row.similarity) {
+          <nz-tag [nzColor]="similarityTagColor(row.similarity)">
+            {{ (row.similarity * 100).toFixed(0) }}% similar
+          </nz-tag>
+          } @else {
+          <span class="muted">—</span>
+          }
+        </td>
+        <td>
+          @if (row.mainSymptoms) {
+          <span>{{ row.mainSymptoms }}</span>
+          } @else {
+          <span class="muted">—</span>
+          }
+        </td>
+      </tr>
+      }
+    </tbody>
+
+  </nz-table>
 
   }
 
