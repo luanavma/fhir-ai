@@ -33,6 +33,7 @@ The AI agent translates questions into validated queries and retrieves data dire
 🔒 Controlled Data Access
 
 For safety and auditability:
+- All generated SQL or FHIR queries are logged so that judges can see the transparency.
 - All database access is mediated through predefined tools.
 - Queries are validated before execution.
 - Results are generated exclusively from real healthcare data.
