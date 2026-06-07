@@ -11,11 +11,15 @@ Instead of manually querying databases or navigating complex healthcare records,
 
 ## ✨ Features
 
-Ask questions such as:
+Ask questions/prompts such as:
 
-- "Show scorpion sting cases by state in the last 30 days"
-- "Which regions reported the highest dengue incidence this month?"
-- "Are there any active COVID-19 clusters right now?"
+1. "Show scorpion sting cases by state in the last 30 days"
+2. "Which regions reported the highest dengue incidence this month?"
+3. "Are there any active COVID-19 clusters right now?"
+4. "Yellow fever in the last month"
+5. "Diarrhea map
+6. "Patients with Ebola group by location"
+7. "Which regions have similar behavior to Recife, PE?"
 
 The AI agent translates questions into validated queries and retrieves data directly from FHIR resources.
 
@@ -142,6 +146,23 @@ Embedded Python runs natively inside IRIS to aggregate clinical features per reg
 The conversational agent never guesses. Every question passes through a terminology discovery step that reads real codes from the FHIR repository before SQL is generated. The SQL builder follows strict FHIR-aware rules. The validator compiles every query against the live IRIS instance before execution. All answers come from real data.
 4. Conversational Epidemiological Interface [Angular]
 A live dashboard that responds to natural language questions. Each answer updates the heatmap, the epicenter panel, and the similar regions table — the last powered by Vector Search — in a single conversational turn.
+
+## 🎥 Demo Videos
+
+Want to see EpInsights in action?
+
+### Full Demo
+
+Watch the complete project walkthrough, including architecture, setup, natural language querying, epidemiological dashboards, heat maps, and Vector Search capabilities:
+
+🔗 https://www.youtube.com/watch?v=Q_v5ag7TAhM
+
+### Quick Overview (YouTube Shorts)
+
+For a quick look at the platform and its key features:
+
+🔗 https://www.youtube.com/shorts/E8jvhfop588
+
 
 ## Authors
 
